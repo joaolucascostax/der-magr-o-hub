@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+
+import go173Capa from "@/assets/go173-capa.jpg.asset.json";
+import go173Video from "@/assets/go173.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -222,6 +226,12 @@ const trabalhosCards = [
 
 const trabalhosVideos = [
   {
+    alt: "Carreta tombada na rodovia GO-173",
+    label: "GO-173",
+    src: go173Capa.url,
+    video: go173Video.url,
+  },
+  {
     alt: "Time-lapse de pavimentação de rua",
     src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDG3IRHgXeKM_751dsqmXAKDiKHObu2nXFK-TLRKkkDxrs7Ic5d7pO9UwlXoly4uEkc56DD72Ey3Wka50QsyLvQmdFOe3f5lu9MZnyUq8eUBPOLL_wT_4ctdX0JnM23dTdAzgICZUCug7hPWrANtlZqRrB3__IbzoJTUYNhy3snDwUSMtao0mpTQjlaM_Ysq2Mwz5F2Qla7pkKIGTbsEQxI0kx0eYG1Etz8bMU6xcNkxITKVKrW0uR1",
   },
@@ -232,6 +242,7 @@ const trabalhosVideos = [
 ];
 
 function TrabalhosSection() {
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   return (
     <div className="relative w-full bg-gradient-to-b from-surface-container-low to-surface py-16">
       <div
@@ -258,24 +269,43 @@ function TrabalhosSection() {
             {trabalhosVideos.map((item, index) => (
               <div
                 key={index}
-                className="group relative h-56 w-44 flex-shrink-0 snap-center overflow-hidden rounded-2xl bg-surface-variant shadow-md"
+                className="group relative h-56 w-44 flex-shrink-0 cursor-pointer snap-center overflow-hidden rounded-2xl bg-surface-variant shadow-md"
+                onClick={() => "video" in item && setPlayingIndex(index)}
               >
-                <img
-                  alt={item.alt}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  src={item.src}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
-                    <span
-                      className="material-symbols-outlined text-3xl text-white"
-                      style={{ fontVariationSettings: "'FILL' 1" }}
-                    >
-                      play_arrow
-                    </span>
-                  </div>
-                </div>
+                {"video" in item && playingIndex === index ? (
+                  <video
+                    autoPlay
+                    className="h-full w-full object-cover"
+                    controls
+                    playsInline
+                    poster={item.src}
+                    src={item.video}
+                  />
+                ) : (
+                  <>
+                    <img
+                      alt={item.alt}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      src={item.src}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                        <span
+                          className="material-symbols-outlined text-3xl text-white"
+                          style={{ fontVariationSettings: "'FILL' 1" }}
+                        >
+                          play_arrow
+                        </span>
+                      </div>
+                    </div>
+                    {"label" in item ? (
+                      <span className="absolute bottom-3 left-3 rounded-md bg-primary/90 px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-on-primary shadow-sm backdrop-blur-sm">
+                        {item.label}
+                      </span>
+                    ) : null}
+                  </>
+                )}
               </div>
             ))}
           </div>
