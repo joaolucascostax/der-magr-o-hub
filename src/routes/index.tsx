@@ -71,7 +71,7 @@ function TopAppBar() {
 
 function HeroSection() {
   return (
-    <section className="relative -mt-16 flex h-[65vh] w-full flex-col justify-end overflow-hidden rounded-b-3xl text-left shadow-lg">
+    <section className="relative isolate -mt-16 flex h-[65vh] w-full flex-col justify-end overflow-hidden rounded-b-3xl text-left shadow-lg">
       <div className="absolute inset-0 -z-10">
         <img
           alt="Vereador Éder Magrão discursando em evento público"
