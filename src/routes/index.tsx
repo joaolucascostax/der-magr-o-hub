@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Vereador Éder Magrão — Transparência e Ação" },
+      { title: "Vereador Éder Magrão — Trabalho e Compromisso" },
       {
         name: "description",
         content:
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Vereador Éder Magrão — Transparência e Ação",
+        content: "Vereador Éder Magrão — Trabalho e Compromisso",
       },
       {
         property: "og:description",
@@ -86,8 +86,8 @@ function HeroSection() {
           Trabalho por Você
         </div>
         <h2 className="font-display text-[44px] font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-md">
-          <span className="block font-light opacity-90">Transparência</span>
-          <span className="block">e Ação</span>
+          <span className="block font-light opacity-90">Trabalho</span>
+          <span className="block">e Compromisso</span>
         </h2>
         <p className="max-w-sm font-body text-lg font-medium text-primary-fixed-dim drop-shadow-sm">
           Acompanhe nosso trabalho em prol de uma cidade melhor para todos.
