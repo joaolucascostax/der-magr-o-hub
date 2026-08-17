@@ -222,6 +222,12 @@ const trabalhosCards = [
 
 const trabalhosVideos = [
   {
+    alt: "Carreta tombada na rodovia GO-173",
+    label: "GO-173",
+    src: go173Capa.url,
+    video: go173Video.url,
+  },
+  {
     alt: "Time-lapse de pavimentação de rua",
     src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDG3IRHgXeKM_751dsqmXAKDiKHObu2nXFK-TLRKkkDxrs7Ic5d7pO9UwlXoly4uEkc56DD72Ey3Wka50QsyLvQmdFOe3f5lu9MZnyUq8eUBPOLL_wT_4ctdX0JnM23dTdAzgICZUCug7hPWrANtlZqRrB3__IbzoJTUYNhy3snDwUSMtao0mpTQjlaM_Ysq2Mwz5F2Qla7pkKIGTbsEQxI0kx0eYG1Etz8bMU6xcNkxITKVKrW0uR1",
   },
@@ -232,6 +238,7 @@ const trabalhosVideos = [
 ];
 
 function TrabalhosSection() {
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   return (
     <div className="relative w-full bg-gradient-to-b from-surface-container-low to-surface py-16">
       <div
