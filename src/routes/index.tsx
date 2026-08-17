@@ -252,7 +252,7 @@ function TrabalhosSection() {
         <div className="flex flex-col gap-5">
           <h4 className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-widest text-primary">
             <span className="material-symbols-outlined text-lg">track_changes</span>
-            Acompanhe as Ações
+            ACOMPANHE NOSSAS LUTAS
           </h4>
           <div className="hide-scrollbar -mx-margin-mobile flex snap-x snap-mandatory gap-4 overflow-x-auto px-margin-mobile pb-6 pt-2 md:mx-0 md:px-0">
             {trabalhosVideos.map((item, index) => (
