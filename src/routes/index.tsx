@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background text-on-background antialiased pb-28 pt-16">
+    <div className="min-h-screen bg-background pb-28 pt-16 text-on-background antialiased">
       <TopAppBar />
       <main className="flex flex-col gap-16">
         <HeroSection />
@@ -43,7 +43,7 @@ function Index() {
 
 function TopAppBar() {
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-outline-variant/50 bg-surface/90 shadow-sm backdrop-blur-md transition-all duration-300 dark:border-outline/50">
+    <header className="fixed top-0 z-50 w-full border-b border-outline-variant/50 bg-surface/90 shadow-sm backdrop-blur-md transition-all duration-300">
       <div className="mx-auto flex h-16 w-full max-w-container-max items-center justify-between px-margin-mobile md:px-margin-desktop">
         <div className="group flex items-center gap-3">
           <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/10 bg-surface-variant shadow-sm">
@@ -53,13 +53,13 @@ function TopAppBar() {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJWT9CsfCY5J5BcPkCqaYLWoAX6R1nbt74Ax5aHITFh8sqduJYRKdMuKkCi57AS2eBlOqvKcBG8u6yq5OFWwTjNfLUQJGoWUpqrgQckpl6ZhTsu8_mAew7Ki9u3SLCegvGx_lgqb9huiEb2B1_ZbO59t3zgpo9Qpjn0v-tNtn52nNCw_855RdG0WBWbFEKOkuQcW3ljzBeStOyBsLxeBnPKMIzNkYQdNGTqKfoqjbg8wpJUTdU9rqV"
             />
           </div>
-          <h1 className="font-display text-xl font-bold tracking-tight text-primary dark:text-primary-fixed">
+          <h1 className="font-display text-xl font-bold tracking-tight text-primary">
             Vereador Éder Magrão
           </h1>
         </div>
         <button
           aria-label="Menu"
-          className="flex items-center justify-center rounded-full p-2 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-primary active:scale-95 dark:text-outline-variant"
+          className="flex items-center justify-center rounded-full p-2 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-primary active:scale-95"
           type="button"
         >
           <span className="material-symbols-outlined">menu</span>
@@ -256,4 +256,235 @@ function TrabalhosSection() {
                 key={index}
                 className="group flex w-72 flex-shrink-0 snap-center flex-col overflow-hidden rounded-2xl border border-outline-variant/20 bg-white shadow-lg shadow-surface-variant/50"
               >
-                <div className=
+                <div className="relative h-44 w-full overflow-hidden bg-surface-variant">
+                  <img
+                    alt={item.alt}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    src={item.src}
+                  />
+                  <div className="absolute right-3 top-3 rounded-full bg-white/90 p-1.5 shadow-sm backdrop-blur-sm text-secondary">
+                    <span
+                      className="material-symbols-outlined text-base"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      check_circle
+                    </span>
+                  </div>
+                </div>
+                <div className="relative flex flex-col gap-3 p-5">
+                  <span className="relative -mt-8 z-10 w-max rounded-md border border-secondary/20 bg-secondary/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-secondary shadow-sm backdrop-blur-md">
+                    {item.status}
+                  </span>
+                  <h4 className="mt-1 font-display text-lg font-bold leading-tight text-on-surface">
+                    {item.title}
+                  </h4>
+                  <div className="group/link mt-1 flex cursor-pointer items-center gap-1 text-sm font-medium text-primary transition-transform duration-300 group-hover:translate-x-1">
+                    <span>Ver detalhes</span>
+                    <span className="material-symbols-outlined text-base">arrow_forward</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <h4 className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-widest text-primary">
+            <span className="material-symbols-outlined text-lg">track_changes</span>
+            Acompanhe as Ações
+          </h4>
+          <div className="hide-scrollbar -mx-margin-mobile flex snap-x snap-mandatory gap-4 overflow-x-auto px-margin-mobile pb-6 pt-2 md:mx-0 md:px-0">
+            {trabalhosVideos.map((item, index) => (
+              <div
+                key={index}
+                className="group relative h-56 w-44 flex-shrink-0 snap-center overflow-hidden rounded-2xl bg-surface-variant shadow-md"
+              >
+                <img
+                  alt={item.alt}
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  src={item.src}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                    <span
+                      className="material-symbols-outlined text-3xl text-white"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      play_arrow
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+const lutasCards = [
+  {
+    alt: "Reunião comunitária em ginásio",
+    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAFLDyd1bm9WlpJdoaXuGfmMQkhzWsko-zvpJpMpYq29Estz1_83mysngegMOtJr7sCBX2lO1JZ1-lLIUKe6PaMpqY36pTwJ7SCCstU38iVcSWuORih_4to5HF5BTEXG8t1I-K1XFea_HbA27bS6Uj6hN6ykFivHGn9bldiRDYDL5h_h8HTYTPG6DlTw6uZZOFYMvWAD3OGCxTlyWGjpe7ebI88Ey50bQ0jSoRAkF1yKwv0pfv3lya3",
+    title: "Saúde Pública",
+  },
+  {
+    alt: "Sala de aula moderna e iluminada",
+    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAsMJAvmXwBC6lKKnrEr5T4nwqUN7LFVjYvQZnri0eYv4XwBKqKtZcjS8fMeOoTbeeKj3GwktqGEH4tMS_Xo16KEmNfClzhyUbgxKU0vv8wUR36GBsSFqXV0EqPdO-8gDncLP6_ylFS86GTsgvVoXX_gG07HZFnHdTU5j9YNeSvwEwgn0tOvTzA-drSFGF9xL-QSHhgwaSUd2YojBlLQ50XrO3per-WxfJmS0D-4RIHTTP59Zb7p-q3",
+    title: "Educação",
+  },
+];
+
+const lutasVideos = [
+  {
+    alt: "Vereador discursando na câmara legislativa",
+    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAR0KdM6tj_zGBYSOtQNVroSm46SmpvzDyNaW3IEDjd8dtlnyNdPNWaFrcfWsF6pY5Kc0IYYcmVFiaUySnf_9uIL4hsiH9gv9SSizIjGbgU2yfQ3hFnr_63f3QDkjk8DFcH_ficXi47OsYIOAG0lkITx5Mf5Avt_8gTRCsax9AaRfE2NnKbtfuw05uG7DXKcVPMnj3vFjDOCs11BlMVIXqcsChXiECBh1Pv_lTA4JFI60HTzr_X4DkT",
+  },
+  {
+    alt: "Mobilização comunitária organizada",
+    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDyr2EksPVi9taM49cX6lblgins6K8MNZQBIZAz84rkk0OaNYRaoq-wuzRxRRw-t4OTN7I8iqV_dczDimtzlWQeSFBBQBzfvhdc-34KISc5qWCQFlh1K8ttJRRPE6kDdbaUMsoD6PsJxzGQFgTUkS7SkUF-LatWFvI2LUXCPxAj_9mXPBE8lybUqyDmILz3vMsEFAUorbnqBlxib3i9yvUcpIVlUmlgVoU_cI7BV3DeA5z8UystiNBT",
+  },
+];
+
+function LutasSection() {
+  return (
+    <section className="relative flex flex-col gap-8 px-margin-mobile md:px-margin-desktop" id="lutas">
+      <div className="flex items-center gap-3">
+        <div className="h-8 w-1.5 rounded-full bg-gradient-to-b from-primary to-secondary" />
+        <h3 className="font-display text-headline-lg-mobile font-extrabold tracking-tight text-primary md:text-headline-lg">
+          Lutas
+        </h3>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        {lutasCards.map((item, index) => (
+          <div
+            key={index}
+            className="group relative aspect-square cursor-pointer overflow-hidden rounded-2xl border border-outline-variant/30 shadow-md transition-shadow duration-300 hover:shadow-xl"
+          >
+            <img
+              alt={item.alt}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+              src={item.src}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-90" />
+            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4 transition-transform duration-300 translate-y-2 group-hover:translate-y-0">
+              <div className="mb-1 h-1 w-8 rounded-full bg-secondary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <span className="font-display text-lg font-bold leading-tight text-white drop-shadow-md">
+                {item.title}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-col gap-5">
+        <h4 className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-widest text-primary">
+          <span className="material-symbols-outlined text-lg">record_voice_over</span>
+          Nossa Voz
+        </h4>
+        <div className="hide-scrollbar -mx-margin-mobile flex snap-x snap-mandatory gap-4 overflow-x-auto px-margin-mobile pb-6 pt-2 md:mx-0 md:px-0">
+          {lutasVideos.map((item, index) => (
+            <div
+              key={index}
+              className="group relative h-56 w-44 flex-shrink-0 snap-center overflow-hidden rounded-2xl bg-surface-variant shadow-md"
+            >
+              <img
+                alt={item.alt}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                src={item.src}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/20 shadow-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                  <span
+                    className="material-symbols-outlined text-3xl text-white"
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
+                    play_arrow
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const socialLinks = [
+  { icon: "chat", label: "WhatsApp" },
+  { icon: "photo_camera", label: "Instagram" },
+  { icon: "smart_display", label: "YouTube" },
+];
+
+function Footer() {
+  return (
+    <footer className="mt-12 flex w-full flex-col items-center gap-6 border-t border-outline-variant/30 bg-surface-container-high px-margin-mobile py-12 pb-24 text-center md:px-margin-desktop">
+      <div className="mb-2 h-1 w-12 rounded-full bg-gradient-to-r from-primary to-secondary" />
+      <p className="font-display text-[22px] font-extrabold text-primary">Vereador Éder Magrão</p>
+      <p className="max-w-sm font-body text-base font-medium text-on-surface-variant">
+        Transparência e Trabalho. Acompanhe nossas redes sociais e participe do nosso mandato.
+      </p>
+      <div className="mt-6 flex gap-8">
+        {socialLinks.map((link, index) => (
+          <a
+            key={index}
+            className="group flex flex-col items-center gap-2 text-on-surface-variant transition-all duration-300 hover:text-primary"
+            href="#"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface shadow-sm transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+              <span className="material-symbols-outlined text-2xl">{link.icon}</span>
+            </div>
+            <span className="font-label text-xs font-medium tracking-wide">{link.label}</span>
+          </a>
+        ))}
+      </div>
+      <div className="my-4 h-px w-full max-w-[200px] bg-outline-variant/30" />
+      <p className="font-body text-xs text-on-surface-variant/80">
+        © 2024 Vereador Éder Magrão.
+        <br />
+        Transparência e Trabalho.
+      </p>
+    </footer>
+  );
+}
+
+const navItems = [
+  { href: "#", icon: "home", label: "Início", active: true },
+  { href: "#projetos", icon: "account_balance", label: "Projetos" },
+  { href: "#trabalhos", icon: "handyman", label: "Trabalhos" },
+  { href: "#lutas", icon: "campaign", label: "Lutas" },
+];
+
+function BottomNavBar() {
+  return (
+    <nav className="fixed bottom-0 left-0 z-50 flex h-20 w-full items-center justify-around border-t border-outline-variant/30 bg-surface/95 px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] backdrop-blur-md pb-safe">
+      {navItems.map((item, index) => {
+        const isActive = item.active;
+        return (
+          <a
+            key={index}
+            className={`flex flex-col items-center justify-center gap-1 rounded-xl px-5 py-2 transition-all duration-200 active:scale-95 ${
+              isActive
+                ? "bg-secondary-container text-on-secondary-container shadow-sm"
+                : "text-on-surface-variant hover:text-primary"
+            }`}
+            href={item.href}
+          >
+            <span
+              className="material-symbols-outlined text-xl"
+              style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
+            >
+              {item.icon}
+            </span>
+            <span className="font-label text-[10px] font-bold tracking-wide">{item.label}</span>
+          </a>
+        );
+      })}
+    </nav>
+  );
+}
