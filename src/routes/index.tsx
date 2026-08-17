@@ -31,8 +31,8 @@ function Index() {
       <TopAppBar />
       <main className="flex flex-col gap-16">
         <HeroSection />
-        <ProjetosSection />
         <TrabalhosSection />
+        <ProjetosSection />
         <LutasSection />
       </main>
       <Footer />
