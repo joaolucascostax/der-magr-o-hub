@@ -300,7 +300,7 @@ function TrabalhosSection() {
                       </div>
                     </div>
                     {"label" in item ? (
-                      <span className="absolute bottom-3 left-3 rounded-md bg-primary/90 px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-on-primary shadow-sm backdrop-blur-sm">
+                      <span className="absolute bottom-3 left-3 text-sm font-bold uppercase tracking-wider text-white drop-shadow-lg">
                         {item.label}
                       </span>
                     ) : null}
