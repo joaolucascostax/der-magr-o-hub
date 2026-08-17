@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+
+import go173Capa from "@/assets/go173-capa.jpg.asset.json";
+import go173Video from "@/assets/go173.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
