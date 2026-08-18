@@ -1,12 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
-import ederMagraoFiscal from "@/assets/eder-magrao-fiscal.jpg.asset.json";
-import heroKombi from "@/assets/eder-magrao-kombi.jpg.asset.json";
-import go173Capa from "@/assets/go173-capa.jpg.asset.json";
-import go173Video from "@/assets/go173.mp4.asset.json";
+import { supabase } from "@/integrations/supabase/client";
+import { getSiteData } from "@/lib/site-content.functions";
+import {
+  resolveMediaUrl,
+  type FooterContent,
+  type HeaderContent,
+  type HeroContent,
+  type MediaItem,
+  type SectionContent,
+  type SiteData,
+} from "@/lib/site-content";
 
 export const Route = createFileRoute("/")({
+  loader: () => getSiteData(),
   head: () => ({
     meta: [
       { title: "Vereador Éder Magrão — Trabalho e Compromisso" },
@@ -32,35 +41,39 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const data = Route.useLoaderData() as SiteData;
+
   return (
     <div className="min-h-screen bg-background pb-28 pt-16 text-on-background antialiased">
-      <TopAppBar />
+      <TopAppBar header={data.header} />
       <main className="flex flex-col gap-10">
-        <HeroSection />
-        <TrabalhosSection />
-        <ProjetosSection />
-        <LutasSection />
+        <HeroSection hero={data.hero} />
+        <TrabalhosSection items={data.media.trabalhos} section={data.sections.trabalhos} />
+        <ProjetosSection items={data.media.projetos} section={data.sections.projetos} />
+        <LutasSection items={data.media.lutas} section={data.sections.lutas} />
       </main>
-      <Footer />
+      <Footer footer={data.footer} />
       <BottomNavBar />
     </div>
   );
 }
 
-function TopAppBar() {
+function TopAppBar({ header }: { header: HeaderContent }) {
   return (
     <header className="fixed top-0 z-50 w-full border-b border-outline-variant/50 bg-surface/90 shadow-sm backdrop-blur-md transition-all duration-300">
       <div className="mx-auto flex h-16 w-full max-w-container-max items-center justify-between px-margin-mobile md:px-margin-desktop">
         <div className="group flex items-center gap-3">
           <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/10 bg-surface-variant shadow-sm">
-            <img
-              alt="Foto do Vereador Éder Magrão"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-              src={ederMagraoFiscal.url}
-            />
+            {header.avatar_url ? (
+              <img
+                alt={`Foto de ${header.name}`}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                src={resolveMediaUrl(header.avatar_url)}
+              />
+            ) : null}
           </div>
           <h1 className="font-display text-xl font-bold tracking-tight text-primary">
-            Magrão da Rádio
+            {header.name}
           </h1>
         </div>
         <button
@@ -75,37 +88,34 @@ function TopAppBar() {
   );
 }
 
-function HeroSection() {
+function HeroSection({ hero }: { hero: HeroContent }) {
   return (
     <section className="relative isolate -mt-16 flex h-[65vh] w-full flex-col justify-end overflow-hidden rounded-b-3xl text-left shadow-lg">
       <div className="absolute inset-0 -z-10">
-        <img
-          alt="Vereador Éder Magrão em atividade de campanha com a comunidade"
-          className="h-full w-full object-cover"
-          src={heroKombi.url}
-        />
+        {hero.image_url ? (
+          <img
+            alt={hero.image_alt}
+            className="h-full w-full object-cover"
+            src={resolveMediaUrl(hero.image_url)}
+          />
+        ) : (
+          <div className="h-full w-full bg-primary" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-transparent mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
       </div>
       <div className="relative z-10 flex flex-col gap-4 px-margin-mobile pb-16 pt-32 md:px-margin-desktop">
         <h2 className="font-display text-[44px] font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-md">
-          <span className="block font-light opacity-90">Trabalho</span>
-          <span className="block">e Compromisso</span>
+          <span className="block font-light opacity-90">{hero.title_line1}</span>
+          <span className="block">{hero.title_line2}</span>
         </h2>
-        <p className="max-w-sm font-body text-lg font-medium text-primary-fixed-dim drop-shadow-sm whitespace-pre-line">
-          Confira toda a jornada e trabalho do candidato à Deputado Estadual Magrão da Rádio.
+        <p className="max-w-sm whitespace-pre-line font-body text-lg font-medium text-primary-fixed-dim drop-shadow-sm">
+          {hero.subtitle}
         </p>
       </div>
     </section>
   );
 }
-
-type VideoItem = {
-  alt: string;
-  label?: string;
-  src: string;
-  video?: string;
-};
 
 function SectionHeading({ title }: { title: string }) {
   return (
@@ -124,10 +134,13 @@ function VideoCarousel({
   subtitle,
 }: {
   icon: string;
-  items: VideoItem[];
+  items: MediaItem[];
   subtitle: string;
 }) {
-  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+
+  if (items.length === 0) return null;
+
   return (
     <div className="flex flex-col gap-5">
       <h4 className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-widest text-primary">
@@ -135,27 +148,27 @@ function VideoCarousel({
         {subtitle}
       </h4>
       <div className="hide-scrollbar -mx-margin-mobile flex snap-x snap-mandatory gap-4 overflow-x-auto px-margin-mobile pb-6 pt-2 md:mx-0 md:px-0">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <div
-            key={index}
+            key={item.id}
             className="group relative h-56 w-44 flex-shrink-0 cursor-pointer snap-center overflow-hidden rounded-2xl bg-surface-variant shadow-md"
-            onClick={() => item.video && setPlayingIndex(index)}
+            onClick={() => item.video_url && setPlayingId(item.id)}
           >
-            {item.video && playingIndex === index ? (
+            {item.video_url && playingId === item.id ? (
               <video
                 autoPlay
                 className="h-full w-full object-cover"
                 controls
                 playsInline
-                poster={item.src}
-                src={item.video}
+                poster={resolveMediaUrl(item.thumb_url)}
+                src={resolveMediaUrl(item.video_url)}
               />
             ) : (
               <>
                 <img
                   alt={item.alt}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  src={item.src}
+                  src={resolveMediaUrl(item.thumb_url)}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90" />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -182,49 +195,32 @@ function VideoCarousel({
   );
 }
 
-const projetosVideos: VideoItem[] = [
-  {
-    alt: "Vereador discursando em evento público",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDKh-fUjw__-g6Hc4P_FTZnc6jv9ru-VotFlQDl4Vd3GMGj1eEo1869K7_Wd7GHosWmhJ1w68V15GpLp0LpTHRwIuaLRdg_JISIJU_Ny--T3fabZ_ppCl6PrpEl5F2Ay1DsCnTper4onHdPNhBQjujXh03PQUWTDO1FtQjlRVc6RTE9_BCQr3Qba0v_SGd-tFDbZzDV8qzbMY3XGG-FPF84OWrR2lksl_rmyCOPlq6zw-6Sw3ooBO6D",
-  },
-  {
-    alt: "Mãos segurando plantas arquitetônicas",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBUKyefh176ZUExn1Di9mhArJgZX6E6L7cI0xejTYb1hCqWS2eqPDMdFNv3khPehJEz_4DiqlZOYIazZyoNhqXfP3v0YhaNxCCe7uGAjIpgAMWK2d0VxXWXQ_4GLlJh7zohgZwK6dxTMsd5lKp1e9WI5MC4RCwf-U5Cm9SrYqzPLwKQMqkZ96SeyLhSashIhNPIjwwmUun2-SikQ_yP5_r1PYqkJI6YA314bBw-zvmulnItDls_TwGu",
-  },
-  {
-    alt: "Interior moderno da prefeitura",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBWpZpq70cHwNNvngkRdCfrfPmE2noUVd2eu5uMHXq122rxKKCuyjCrFhJQvYcDo8MDyhkN-DpxeXMV6ZwqR0dP-UWPH8WXL4brc8oSdnKMo1mGFzuQ9EfmOrGpOtcwczY0BitduHQa7klSrARrdX0GB0ms172V5Irh3UGWjh0sDj2NV0MKxvx9SghmQ6wIMbPpCPh1OFtNiQavI1ITBYeYktqUECrgxd1DLWdi4e7zk6d2vlYG2XIi",
-  },
-];
-
-function ProjetosSection() {
+function ProjetosSection({
+  items,
+  section,
+}: {
+  items: MediaItem[];
+  section: SectionContent;
+}) {
   return (
-    <section className="relative flex flex-col gap-8 px-margin-mobile md:px-margin-desktop" id="projetos">
+    <section
+      className="relative flex flex-col gap-8 px-margin-mobile md:px-margin-desktop"
+      id="projetos"
+    >
       <div className="absolute -right-10 -top-10 -z-10 h-32 w-32 rounded-full bg-primary-fixed/30 blur-3xl" />
-      <SectionHeading title="Projetos" />
-      <VideoCarousel icon="play_circle" items={projetosVideos} subtitle="VÍDEOS DOS PROJETOS" />
+      <SectionHeading title={section.title} />
+      <VideoCarousel icon={section.icon} items={items} subtitle={section.subtitle} />
     </section>
   );
 }
 
-const trabalhosVideos: VideoItem[] = [
-  {
-    alt: "Carreta tombada na rodovia GO-173",
-    label: "GO-173",
-    src: go173Capa.url,
-    video: go173Video.url,
-  },
-  {
-    alt: "Time-lapse de pavimentação de rua",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDG3IRHgXeKM_751dsqmXAKDiKHObu2nXFK-TLRKkkDxrs7Ic5d7pO9UwlXoly4uEkc56DD72Ey3Wka50QsyLvQmdFOe3f5lu9MZnyUq8eUBPOLL_wT_4ctdX0JnM23dTdAzgICZUCug7hPWrANtlZqRrB3__IbzoJTUYNhy3snDwUSMtao0mpTQjlaM_Ysq2Mwz5F2Qla7pkKIGTbsEQxI0kx0eYG1Etz8bMU6xcNkxITKVKrW0uR1",
-  },
-  {
-    alt: "Cerimônia de inauguração com corte de fita",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCmJG6ZkEJebG5JVTndLdyru3SLwYdVyJa5F9Vn3tw8VXajYYQ6TkLUEY_RE-r2mDdjg61TSB_kPAZkZbpJvR__LsSqWl5PziST97r4nctAWVqHa84D7PtQ9yj7ozmtcIMzMrLpwekf-ALYmLBR7P75WcPudaB4PL3nYuohp9f-jijEvd9VFv1D70ODz2_2NjgHbMO69SM0it8P_DNmcxBur6ofLovOkdF7ORxxHIkjc_Tas5Wm75As",
-  },
-];
-
-function TrabalhosSection() {
+function TrabalhosSection({
+  items,
+  section,
+}: {
+  items: MediaItem[];
+  section: SectionContent;
+}) {
   return (
     <div className="relative w-full bg-gradient-to-b from-surface-container-low to-surface py-16">
       <div
@@ -234,54 +230,61 @@ function TrabalhosSection() {
           backgroundSize: "20px 20px",
         }}
       />
-      <section className="relative z-10 flex flex-col gap-8 px-margin-mobile md:px-margin-desktop" id="trabalhos">
-        <SectionHeading title="Trabalhos Realizados" />
-        <VideoCarousel icon="track_changes" items={trabalhosVideos} subtitle="ACOMPANHE NOSSAS LUTAS" />
+      <section
+        className="relative z-10 flex flex-col gap-8 px-margin-mobile md:px-margin-desktop"
+        id="trabalhos"
+      >
+        <SectionHeading title={section.title} />
+        <VideoCarousel icon={section.icon} items={items} subtitle={section.subtitle} />
       </section>
     </div>
   );
 }
 
-const lutasVideos: VideoItem[] = [
-  {
-    alt: "Vereador discursando na câmara legislativa",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAR0KdM6tj_zGBYSOtQNVroSm46SmpvzDyNaW3IEDjd8dtlnyNdPNWaFrcfWsF6pY5Kc0IYYcmVFiaUySnf_9uIL4hsiH9gv9SSizIjGbgU2yfQ3hFnr_63f3QDkjk8DFcH_ficXi47OsYIOAG0lkITx5Mf5Avt_8gTRCsax9AaRfE2NnKbtfuw05uG7DXKcVPMnj3vFjDOCs11BlMVIXqcsChXiECBh1Pv_lTA4JFI60HTzr_X4DkT",
-  },
-  {
-    alt: "Mobilização comunitária organizada",
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDyr2EksPVi9taM49cX6lblgins6K8MNZQBIZAz84rkk0OaNYRaoq-wuzRxRRw-t4OTN7I8iqV_dczDimtzlWQeSFBBQBzfvhdc-34KISc5qWCQFlh1K8ttJRRPE6kDdbaUMsoD6PsJxzGQFgTUkS7SkUF-LatWFvI2LUXCPxAj_9mXPBE8lybUqyDmILz3vMsEFAUorbnqBlxib3i9yvUcpIVlUmlgVoU_cI7BV3DeA5z8UystiNBT",
-  },
-];
-
-function LutasSection() {
+function LutasSection({ items, section }: { items: MediaItem[]; section: SectionContent }) {
   return (
-    <section className="relative flex flex-col gap-8 px-margin-mobile md:px-margin-desktop" id="lutas">
-      <SectionHeading title="Lutas" />
-      <VideoCarousel icon="record_voice_over" items={lutasVideos} subtitle="NOSSA VOZ" />
+    <section
+      className="relative flex flex-col gap-8 px-margin-mobile md:px-margin-desktop"
+      id="lutas"
+    >
+      <SectionHeading title={section.title} />
+      <VideoCarousel icon={section.icon} items={items} subtitle={section.subtitle} />
     </section>
   );
 }
 
-const socialLinks = [
-  { icon: "chat", label: "WhatsApp" },
-  { icon: "photo_camera", label: "Instagram" },
-  { icon: "smart_display", label: "YouTube" },
-];
+function Footer({ footer }: { footer: FooterContent }) {
+  const [signedIn, setSignedIn] = useState(false);
 
-function Footer() {
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSignedIn(Boolean(data.session)));
+    const { data } = supabase.auth.onAuthStateChange((_event, session) =>
+      setSignedIn(Boolean(session)),
+    );
+    return () => data.subscription.unsubscribe();
+  }, []);
+
+  const socialLinks = [
+    { icon: "chat", label: "WhatsApp", href: footer.whatsapp_url },
+    { icon: "photo_camera", label: "Instagram", href: footer.instagram_url },
+    { icon: "smart_display", label: "YouTube", href: footer.youtube_url },
+  ];
+
   return (
     <footer className="mt-12 flex w-full flex-col items-center gap-6 border-t border-outline-variant/30 bg-surface-container-high px-margin-mobile py-12 pb-24 text-center md:px-margin-desktop">
       <div className="mb-2 h-1 w-12 rounded-full bg-gradient-to-r from-primary to-secondary" />
-      <p className="font-display text-[22px] font-extrabold text-primary">Vereador Éder Magrão</p>
+      <p className="font-display text-[22px] font-extrabold text-primary">{footer.name}</p>
       <p className="max-w-sm font-body text-base font-medium text-on-surface-variant">
-        Transparência e Trabalho. Acompanhe nossas redes sociais e participe do nosso mandato.
+        {footer.description}
       </p>
       <div className="mt-6 flex gap-8">
-        {socialLinks.map((link, index) => (
+        {socialLinks.map((link) => (
           <a
-            key={index}
+            key={link.label}
             className="group flex flex-col items-center gap-2 text-on-surface-variant transition-all duration-300 hover:text-primary"
-            href="#"
+            href={link.href || "#"}
+            rel="noreferrer"
+            target="_blank"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface shadow-sm transition-colors group-hover:bg-primary/10 group-hover:text-primary">
               <span className="material-symbols-outlined text-2xl">{link.icon}</span>
@@ -291,30 +294,34 @@ function Footer() {
         ))}
       </div>
       <div className="my-4 h-px w-full max-w-[200px] bg-outline-variant/30" />
-      <p className="font-body text-xs text-on-surface-variant/80">
-        © 2024 Vereador Éder Magrão.
-        <br />
-        Transparência e Trabalho.
+      <p className="whitespace-pre-line font-body text-xs text-on-surface-variant/80">
+        {footer.copyright}
       </p>
+      <Link
+        className="font-label text-xs font-medium text-on-surface-variant/70 underline-offset-4 hover:text-primary hover:underline"
+        to={signedIn ? "/admin" : "/auth"}
+      >
+        {signedIn ? "Painel administrativo" : "Área restrita"}
+      </Link>
     </footer>
   );
 }
 
 const navItems = [
   { href: "#", icon: "home", label: "Início", active: true },
-  { href: "#projetos", icon: "account_balance", label: "Projetos" },
   { href: "#trabalhos", icon: "handyman", label: "Trabalhos" },
+  { href: "#projetos", icon: "account_balance", label: "Projetos" },
   { href: "#lutas", icon: "campaign", label: "Lutas" },
 ];
 
 function BottomNavBar() {
   return (
     <nav className="fixed bottom-0 left-0 z-50 flex h-20 w-full items-center justify-around border-t border-outline-variant/30 bg-surface/95 px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] backdrop-blur-md pb-safe">
-      {navItems.map((item, index) => {
+      {navItems.map((item) => {
         const isActive = item.active;
         return (
           <a
-            key={index}
+            key={item.label}
             className={`flex flex-col items-center justify-center gap-1 rounded-xl px-5 py-2 transition-all duration-200 active:scale-95 ${
               isActive
                 ? "bg-secondary-container text-on-secondary-container shadow-sm"
