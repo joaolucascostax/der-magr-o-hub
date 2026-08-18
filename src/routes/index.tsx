@@ -59,7 +59,7 @@ function TopAppBar() {
             />
           </div>
           <h1 className="font-display text-xl font-bold tracking-tight text-primary">
-            Vereador Éder Magrão
+            Magrão da Rádio
           </h1>
         </div>
         <button
