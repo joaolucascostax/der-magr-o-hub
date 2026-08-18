@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import ederMagraoFiscal from "@/assets/eder-magrao-fiscal.jpg.asset.json";
 import heroKombi from "@/assets/eder-magrao-kombi.jpg.asset.json";
 import go173Capa from "@/assets/go173-capa.jpg.asset.json";
 import go173Video from "@/assets/go173.mp4.asset.json";
