@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import heroKombi from "@/assets/eder-magrao-kombi.jpg.asset.json";
 import go173Capa from "@/assets/go173-capa.jpg.asset.json";
 import go173Video from "@/assets/go173.mp4.asset.json";
 
@@ -78,9 +79,9 @@ function HeroSection() {
     <section className="relative isolate -mt-16 flex h-[65vh] w-full flex-col justify-end overflow-hidden rounded-b-3xl text-left shadow-lg">
       <div className="absolute inset-0 -z-10">
         <img
-          alt="Vereador Éder Magrão discursando em evento público"
+          alt="Vereador Éder Magrão em atividade de campanha com a comunidade"
           className="h-full w-full object-cover"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKh-fUjw__-g6Hc4P_FTZnc6jv9ru-VotFlQDl4Vd3GMGj1eEo1869K7_Wd7GHosWmhJ1w68V15GpLp0LpTHRwIuaLRdg_JISIJU_Ny--T3fabZ_ppCl6PrpEl5F2Ay1DsCnTper4onHdPNhBQjujXh03PQUWTDO1FtQjlRVc6RTE9_BCQr3Qba0v_SGd-tFDbZzDV8qzbMY3XGG-FPF84OWrR2lksl_rmyCOPlq6zw-6Sw3ooBO6D"
+          src={heroKombi.url}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/60 to-transparent mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
