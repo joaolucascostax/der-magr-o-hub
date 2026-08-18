@@ -35,7 +35,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background pb-28 pt-16 text-on-background antialiased">
       <TopAppBar />
-      <main className="flex flex-col gap-16">
+      <main className="flex flex-col gap-10">
         <HeroSection />
         <TrabalhosSection />
         <ProjetosSection />
