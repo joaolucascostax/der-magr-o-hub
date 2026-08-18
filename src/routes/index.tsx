@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import ederMagraoFiscal from "@/assets/eder-magrao-fiscal.jpg.asset.json";
 import heroKombi from "@/assets/eder-magrao-kombi.jpg.asset.json";
 import go173Capa from "@/assets/go173-capa.jpg.asset.json";
 import go173Video from "@/assets/go173.mp4.asset.json";
@@ -55,7 +56,7 @@ function TopAppBar() {
             <img
               alt="Foto do Vereador Éder Magrão"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJWT9CsfCY5J5BcPkCqaYLWoAX6R1nbt74Ax5aHITFh8sqduJYRKdMuKkCi57AS2eBlOqvKcBG8u6yq5OFWwTjNfLUQJGoWUpqrgQckpl6ZhTsu8_mAew7Ki9u3SLCegvGx_lgqb9huiEb2B1_ZbO59t3zgpo9Qpjn0v-tNtn52nNCw_855RdG0WBWbFEKOkuQcW3ljzBeStOyBsLxeBnPKMIzNkYQdNGTqKfoqjbg8wpJUTdU9rqV"
+              src={ederMagraoFiscal.url}
             />
           </div>
           <h1 className="font-display text-xl font-bold tracking-tight text-primary">
