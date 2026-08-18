@@ -92,8 +92,8 @@ function HeroSection() {
           <span className="block font-light opacity-90">Trabalho</span>
           <span className="block">e Compromisso</span>
         </h2>
-        <p className="max-w-sm font-body text-lg font-medium text-primary-fixed-dim drop-shadow-sm">
-          Acompanhe nosso trabalho em prol de uma cidade melhor para todos.
+        <p className="max-w-sm font-body text-lg font-medium text-primary-fixed-dim drop-shadow-sm whitespace-pre-line">
+          Confira toda a jornada e trabalho do candidato à Deputado Estadual Magrão da Rádio.
         </p>
       </div>
     </section>
