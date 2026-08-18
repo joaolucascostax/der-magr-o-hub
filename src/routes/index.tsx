@@ -87,7 +87,7 @@ function HeroSection() {
       </div>
       <div className="relative z-10 flex flex-col gap-4 px-margin-mobile pb-16 pt-32 md:px-margin-desktop">
         <div className="w-max rounded-full bg-secondary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-on-secondary shadow-md backdrop-blur-sm">
-          Trabalho por Você
+          DEPUTADO ESTADUAL
         </div>
         <h2 className="font-display text-[44px] font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-md">
           <span className="block font-light opacity-90">Trabalho</span>
